@@ -1,10 +1,10 @@
 /**
  * Get dimensions of any image by url
  * @param {string} url
- * @param {number} [timeout] timeout for reject
+ * @param {number} [rejectTimeout] timeout for reject
  * @return {Promise<{ width: number, height: number }>}
  */
-export default (url, timeout) => new Promise((resolve, reject) => {
+export default (url, rejectTimeout) => new Promise((resolve, reject) => {
   let timer = null;
 
   const img = new Image();
@@ -23,7 +23,7 @@ export default (url, timeout) => new Promise((resolve, reject) => {
 
   img.src = url;
 
-  if (timeout) {
-    timer = setTimeout(() => reject(null), timeout);
+  if (rejectTimeout) {
+    timer = setTimeout(() => reject(null), rejectTimeout);
   }
 });
