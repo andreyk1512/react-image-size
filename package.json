@@ -1,9 +1,10 @@
 {
   "name": "react-image-size",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Get dimensions of any image by url",
   "main": "index.js",
   "scripts": {
+    "publish": "npm publish --access public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
