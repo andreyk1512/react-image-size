@@ -1,1 +1,3 @@
-export default from './src/reactImageSize'
+import reactImageSize from './src/reactImageSize';
+
+export default reactImageSize;
