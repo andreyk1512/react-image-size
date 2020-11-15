@@ -1,1 +1,1 @@
-export { default as reactImageSize } from './src/reactImageSize'
+export default from './src/reactImageSize'
