@@ -15,15 +15,15 @@ export default (url, rejectTimeout) => new Promise((resolve, reject) => {
     resolve(img);
   });
 
-  img.addEventListener('error', () => {
+  img.addEventListener('error', (event) => {
     if (timer) { clearTimeout(timer); }
 
-    reject(null);
+    reject(`${event.type}: ${event.message}`);
   });
 
   img.src = url;
 
   if (rejectTimeout) {
-    timer = setTimeout(() => reject(null), rejectTimeout);
+    timer = setTimeout(() => reject('Timeout exception'), rejectTimeout);
   }
 });
