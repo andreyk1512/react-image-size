@@ -1,9 +1,8 @@
 {
   "name": "react-image-size",
-  "version": "1.0.6",
-  "description": "Get dimensions of any image by url",
+  "version": "2.0.0",
+  "description": "Functional for getting dimensions of any image by url",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "publish": "npm publish --access public",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,29 +13,29 @@
   },
   "files": [
     "index.js",
-    "Readme.md",
-    "LICENSE"
+    "index.d.ts"
   ],
-  "exports": {
-    ".": {
-      "default": "./index.js"
-    },
-    "./package.json": "./package.json"
-  },
   "keywords": [
+    "react",
+    "react-hooks",
     "image",
     "image-size",
-    "react-image-size",
+    "image-dimension",
+    "dimension",
     "size",
-    "dimensions",
     "resolution",
+    "image-resolution",
     "width",
     "height"
   ],
-  "author": "Andrey Krupa",
+  "author": "Andrii Krupa",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/andreyk1512/react-image-size/issues"
   },
-  "homepage": "https://github.com/andreyk1512/react-image-size#readme"
+  "homepage": "https://github.com/andreyk1512/react-image-size#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  }
 }

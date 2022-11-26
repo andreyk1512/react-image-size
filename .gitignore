@@ -1,2 +1,5 @@
-# Intellij Idea
+# IDE
 .idea/
+
+# Dependency directories
+node_modules/
