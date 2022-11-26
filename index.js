@@ -12,7 +12,7 @@ export default (url, rejectTimeout) => new Promise((resolve, reject) => {
   img.addEventListener('load', () => {
     if (timer) { clearTimeout(timer); }
 
-    resolve({ width: img.width, height: img.height });
+    resolve({ width: img.naturalWidth, height: img.naturalHeight });
   });
 
   img.addEventListener('error', (event) => {
