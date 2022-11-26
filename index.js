@@ -39,7 +39,7 @@ function useImageSize(url, options = {}) {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const fetch = async () => {
       setLoading(true);
       setDimensions(null);

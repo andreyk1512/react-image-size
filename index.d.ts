@@ -15,10 +15,3 @@ declare type UseImageSizeResult = [
 ];
 
 declare function useImageSize(url: string, options?: Options): UseImageSizeResult;
-
-declare type ExportDefault = {
-  getImageSize,
-  useImageSize,
-};
-
-export default ExportDefault;
