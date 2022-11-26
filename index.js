@@ -1,3 +1,8 @@
+const ERROR = {
+  WINDOW_VARIABLE_NOT_FOUND: 'Window variable not found',
+  TIMEOUT: 'Timeout exception',
+};
+
 /**
  * Get dimensions of any image by url
  * @param {string} url
@@ -5,6 +10,10 @@
  * @return {Promise<{ width: number, height: number }>}
  */
 export default (url, rejectTimeout) => new Promise((resolve, reject) => {
+  if (typeof window === 'undefined') {
+    return reject(ERROR.WINDOW_VARIABLE_NOT_FOUND);
+  }
+
   let timer = null;
 
   const img = new Image();
@@ -12,7 +21,7 @@ export default (url, rejectTimeout) => new Promise((resolve, reject) => {
   img.addEventListener('load', () => {
     if (timer) { clearTimeout(timer); }
 
-    resolve({ width: img.width, height: img.height });
+    resolve({ width: img.naturalWidth, height: img.naturalHeight });
   });
 
   img.addEventListener('error', (event) => {
@@ -24,6 +33,6 @@ export default (url, rejectTimeout) => new Promise((resolve, reject) => {
   img.src = url;
 
   if (rejectTimeout) {
-    timer = setTimeout(() => reject('Timeout exception'), rejectTimeout);
+    timer = setTimeout(() => reject(ERROR.TIMEOUT), rejectTimeout);
   }
 });
