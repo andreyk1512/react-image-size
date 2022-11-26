@@ -14,16 +14,13 @@ or
 yarn add react-image-size
 ```
 
-### Async/Await
+### Migrate to V2
 ```javascript
-import reactImageSize from 'react-image-size';
+//import reactImageSize from 'react-image-size';
+import { getImageSize } from 'react-image-size';
 
-try {
-  const { width, height } = await reactImageSize(imageUrl);
-  ...
-} catch {
-  ...
-}
+//const { width, height } = await reactImageSize(imageUrl);
+const { width, height } = await getImageSize(imageUrl);
 ```
 
 ### Using hook
