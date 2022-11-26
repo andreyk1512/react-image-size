@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getImageSize } from './getImageSize';
 import { Dimensions, Options, UseImageSizeResult } from './types';
 
-export const useImageSize = (url: string, options: Options): UseImageSizeResult => {
+export const useImageSize = (url: string, options?: Options): UseImageSizeResult => {
   const [dimensions, setDimensions] = useState<Dimensions | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
