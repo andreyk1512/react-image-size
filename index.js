@@ -52,7 +52,7 @@ function getImageSize(url, options = {}) {
  * @typedef {[?Dimension, Other]} ReturnTuple
  * @return ReturnTuple
  */
-function useImageSize(url, options = {}) {
+function useImageSize(url, options) {
   const [dimensions, setDimensions] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
