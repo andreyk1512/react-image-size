@@ -1,42 +1,51 @@
 {
   "name": "react-image-size",
-  "version": "1.0.6",
-  "description": "Get dimensions of any image by url",
-  "main": "index.js",
-  "type": "module",
+  "version": "2.0.0",
+  "description": "Functional for getting dimensions of any image by url",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "publish": "npm publish --access public",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare" : "npm run build",
+    "prepublishOnly" : "npm run lint",
+    "preversion" : "npm run lint",
+    "version" : "npm run format && git add -A src",
+    "postversion" : "git push && git push --tags"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andreyk1512/react-image-size.git"
   },
-  "files": [
-    "index.js",
-    "Readme.md",
-    "LICENSE"
-  ],
-  "exports": {
-    ".": {
-      "default": "./index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "files": ["lib/**/*"],
   "keywords": [
+    "react",
+    "react-hooks",
     "image",
     "image-size",
-    "react-image-size",
+    "image-dimension",
+    "dimension",
     "size",
-    "dimensions",
     "resolution",
+    "image-resolution",
     "width",
     "height"
   ],
-  "author": "Andrey Krupa",
+  "author": "Andrii Krupa",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/andreyk1512/react-image-size/issues"
   },
-  "homepage": "https://github.com/andreyk1512/react-image-size#readme"
+  "homepage": "https://github.com/andreyk1512/react-image-size#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^4.9.3"
+  }
 }
