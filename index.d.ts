@@ -15,3 +15,8 @@ declare type UseImageSizeResult = [
 ];
 
 declare function useImageSize(url: string, options?: Options): UseImageSizeResult;
+
+export {
+  getImageSize,
+  useImageSize,
+}
