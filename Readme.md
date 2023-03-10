@@ -53,10 +53,10 @@ getImageSize(imageUrl)
 ```javascript
 import { getImageSize } from 'react-image-size';
 
-const rejectTimeout = 5000; // ms
+const timeout = 5000; // ms
 
 try {
-  const { width, height } = await getImageSize(imageUrl, rejectTimeout);
+  const { width, height } = await getImageSize(imageUrl, { timeout });
   ...
 } catch (errorMessage) {
   // if request takes longer than 5 seconds an timeout exception will be thrown
