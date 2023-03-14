@@ -1,6 +1,6 @@
 {
   "name": "react-image-size",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Functional for getting dimensions of any image by url",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
