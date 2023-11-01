@@ -4,3 +4,6 @@
 # Dependency directories
 node_modules/
 lib/
+
+# Coverage directory
+coverage

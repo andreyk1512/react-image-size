@@ -24,7 +24,6 @@
       }
     ],
     "newline-before-return": true,
-    "newline-per-chained-call": true,
     "no-consecutive-blank-lines": true,
     "no-irregular-whitespace": true,
     "no-trailing-whitespace": true,
@@ -33,7 +32,6 @@
     "semicolon": true,
     "trailing-comma": true,
     "typedef-whitespace": true,
-    "whitespace": true,
-    "react-hooks-nesting": "error"
+    "whitespace": true
   }
 }
