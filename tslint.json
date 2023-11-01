@@ -1,3 +1,39 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier"]
+  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-react-hooks"],
+  "rules": {
+    "no-console": true,
+    "no-any": true,
+    "no-empty": true,
+    "no-empty-interface": true,
+    "only-arrow-functions": true,
+    "array-type": [true, "array"],
+    "arrow-return-shorthand": true,
+    "no-unnecessary-callback-wrapper": true,
+    "one-variable-per-declaration": true,
+    "ordered-imports": true,
+    "arrow-parens": true,
+    "import-spacing": true,
+    "indent": [true, "spaces", 4],
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import |^export {(.*?)}",
+        "check-strings": true,
+        "check-regex": true
+      }
+    ],
+    "newline-before-return": true,
+    "newline-per-chained-call": true,
+    "no-consecutive-blank-lines": true,
+    "no-irregular-whitespace": true,
+    "no-trailing-whitespace": true,
+    "number-literal-format": true,
+    "quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
+    "semicolon": true,
+    "trailing-comma": true,
+    "typedef-whitespace": true,
+    "whitespace": true,
+    "react-hooks-nesting": "error"
+  }
 }
