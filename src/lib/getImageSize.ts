@@ -16,7 +16,7 @@ export const getImageSize = (url: string, options: Options = {}): Promise<Dimens
 
     img.addEventListener('load', () => {
       if (timer) {
-        clearTimeout(timer);
+        window.clearTimeout(timer);
       }
 
       resolve({ width: img.naturalWidth, height: img.naturalHeight });
@@ -24,7 +24,7 @@ export const getImageSize = (url: string, options: Options = {}): Promise<Dimens
 
     img.addEventListener('error', (event) => {
       if (timer) {
-        clearTimeout(timer);
+        window.clearTimeout(timer);
       }
 
       reject(`${event.type}: ${event.message}`);
@@ -33,7 +33,7 @@ export const getImageSize = (url: string, options: Options = {}): Promise<Dimens
     img.src = url;
 
     if (options.timeout) {
-      timer = setTimeout(() => reject('Timeout'), options.timeout);
+      timer = window.setTimeout(() => reject('Timeout'), options.timeout);
     }
   });
 };
