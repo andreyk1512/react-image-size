@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 2.1.0 - 2023-11-02
+## [2.1.0] - 2023-11-02
 
 ### Added
 - Add unit tests
@@ -92,3 +92,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add [LICENSE](LICENSE) file
 - Add [package.json](package.json) meta data
 - Add `reactImageSize` function
+
+[2.1.0]: https://github.com/andreyk1512/react-image-size/releases/tag/v2.1.0
