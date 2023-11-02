@@ -20,9 +20,13 @@ jobs:
           registry-url: https://registry.npmjs.org/
           node-version: '14'
 
-      # Install dependencies (required by Run tests step)
+      # Install dependencies
       - name: Install dependencies
         run: npm i
+
+      # Build the project
+      - name: Build
+        run: npm run build
 
       # Tests
       - name: Run tests
