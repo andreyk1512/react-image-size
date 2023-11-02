@@ -1,13 +1,19 @@
 import { Dimensions, Options } from './types';
 
+export const Error = {
+  WINDOW_IS_NOT_DEFINED: 'Window is not defined',
+  URL_IS_NOT_DEFINED: 'Url is not defined',
+  TIMEOUT: 'Timeout',
+} as const;
+
 export const getImageSize = (url: string, options: Options = {}): Promise<Dimensions> => {
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined') {
-      return reject('Window is not defined');
+      return reject(Error.WINDOW_IS_NOT_DEFINED);
     }
 
     if (!url) {
-      return reject('Url is not defined');
+      return reject(Error.URL_IS_NOT_DEFINED);
     }
 
     let timer: number | null = null;
@@ -33,7 +39,7 @@ export const getImageSize = (url: string, options: Options = {}): Promise<Dimens
     img.src = url;
 
     if (options.timeout) {
-      timer = window.setTimeout(() => reject('Timeout'), options.timeout);
+      timer = window.setTimeout(() => reject(Error.TIMEOUT), options.timeout);
     }
   });
 };

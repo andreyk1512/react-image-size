@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- Add object with error constants 
+
 ## [2.1.0] - 2023-11-02
 
 ### Added
@@ -62,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.5 - 2022-04-30
 
 ### Changed
-- Move `reactImageSize` function to [index.js](index.js) file
+- Move `reactImageSize` function to `index.js` file
 - Update [package.json](package.json) type, files and exports
 
 ## 1.0.4 - 2020-11-16
