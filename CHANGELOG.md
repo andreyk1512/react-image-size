@@ -7,8 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [2.3.0] - 2023-11-02
+
 ### Added
-- Add object with error constants 
+- Add `react` and `react-dom` to dev dependencies
+
+### Changed
+- Rename Changes.md to CHANGELOG.md and Readme.md to README.md
+
+### Removed
+- Remove unused scripts in [package.json](package.json)
+
+## [2.2.0] - 2023-11-02
+
+### Added
+- Add object with error constants
 
 ## [2.1.0] - 2023-11-02
 
@@ -96,4 +109,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add [package.json](package.json) meta data
 - Add `reactImageSize` function
 
+[2.3.0]: https://github.com/andreyk1512/react-image-size/releases/tag/v2.3.0
+[2.2.0]: https://github.com/andreyk1512/react-image-size/releases/tag/v2.2.0
 [2.1.0]: https://github.com/andreyk1512/react-image-size/releases/tag/v2.1.0
