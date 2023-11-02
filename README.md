@@ -1,5 +1,13 @@
+# <img src="https://akrupa1512-common-public.s3.eu-central-1.amazonaws.com/images/react-image-size-logo.png" alt="react-image-size" />
+
+![npm type definitions](https://img.shields.io/npm/types/react-image-size)
+![npm](https://img.shields.io/npm/v/react-image-size)
+![npm package minimized gzipped size (select exports)](https://img.shields.io/bundlejs/size/react-image-size)
+![NPM](https://img.shields.io/npm/l/react-image-size)
+![npm](https://img.shields.io/npm/dw/react-image-size)
+
 # Introduction
-react-image-size is a JavaScript library for obtaining the width and height of an image from its URL. It provides a React hook and an asynchronous function for retrieving image dimensions.
+**react-image-size** is a JavaScript library for obtaining the width and height of an image from its URL. It provides a React hook and an asynchronous function for retrieving image dimensions.
 
 ## Installation
 You can install the library using npm or yarn:
