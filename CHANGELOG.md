@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add unit tests
-- Add [Changes.md](Changes.md) file
+- Add [CHANGELOG.md](CHANGELOG.md) file
 
 ### Changed
 - Improve tslint
@@ -28,13 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Format [package.json](package.json) file
-- Improve [Readme.md](Readme.md) doc
+- Improve [README.md](README.md) doc
 - Update `prettier` and `typescript` dev dependencies
 
 ## 2.0.1 - 2023-03-14
 
 ### Fixed
-- Fix example with "reject timer" in the Readme.md (PR [#6](https://github.com/andreyk1512/react-image-size/pull/6))
+- Fix example with "reject timer" in the README.md (PR [#6](https://github.com/andreyk1512/react-image-size/pull/6))
 
 ### Changed
 - Improve [tslint.json](tslint.json) config
@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Update [package.json](package.json) meta
-- Improve [Readme.md](Readme.md)
+- Improve [README.md](README.md)
 - Change files structure
 
 ## 1.0.6 - 2022-11-26
@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.3 - 2020-11-15
 
 ### Added
-- Add [Readme.md](Readme.md) file
+- Add [README.md](README.md) file
 
 ## 1.0.2 - 2020-11-15
 
