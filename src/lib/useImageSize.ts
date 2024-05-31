@@ -11,6 +11,7 @@ export const useImageSize = (url: string, options?: Options): UseImageSizeResult
     const fetch = async () => {
       setLoading(true);
       setDimensions(null);
+      setError(null);
 
       try {
         const { width, height } = await getImageSize(url, options);
