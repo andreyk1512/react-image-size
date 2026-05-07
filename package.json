@@ -1,7 +1,7 @@
 {
   "name": "react-image-size",
   "version": "3.1.0",
-  "description": "Functional for getting dimensions of any image by url",
+  "description": "React hook and utility to get image dimensions from a URL. Caching, retries, abort, SSR-safe.",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
@@ -31,15 +31,23 @@
   "keywords": [
     "react",
     "react-hooks",
+    "hook",
+    "typescript",
     "image",
     "image-size",
+    "image-dimensions",
     "image-dimension",
     "dimension",
+    "dimensions",
     "size",
     "resolution",
     "image-resolution",
     "width",
-    "height"
+    "height",
+    "url",
+    "aspect-ratio",
+    "nextjs",
+    "ssr"
   ],
   "author": "Andrii Krupa",
   "license": "MIT",
