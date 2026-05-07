@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 3.0.0 - 2026-05-07
-
 ### Breaking Changes
 - Error strings from `useImageSize` no longer include the `Error:` prefix. `error` state now returns `err.message` for Error instances instead of `err.toString()`. Example: `"Image not found"` instead of `"Error: Image not found"`
 - ESM entry point added — bundlers resolving `"exports"` field will now get ESM by default
