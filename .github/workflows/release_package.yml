@@ -11,26 +11,27 @@ jobs:
     steps:
       # Checkout project repository
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Setup Node.js environment
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           registry-url: https://registry.npmjs.org/
-          node-version: '14'
+          node-version: '20'
+          cache: 'yarn'
 
       # Install dependencies
       - name: Install dependencies
-        run: npm i
+        run: yarn install --frozen-lockfile
 
       # Build the project
       - name: Build
-        run: npm run build
+        run: yarn build
 
       # Tests
       - name: Run tests
-        run: npm run test
+        run: yarn test
 
       # Configure Git
       - name: Git configuration
