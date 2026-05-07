@@ -70,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `prettier` and `typescript` dev dependencies
 
 ### Fixed
-- Fix [package-lock.json](package-lock.json) version
+- Fix package-lock.json version
 
 ## 2.0.1 - 2023-03-14
 ### Changed
@@ -82,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2.0.0 - 2022-11-26
 ### Added
 - Add `peerDependencies` to [package.json](package.json)
-- Add [package-lock.json](package-lock.json)
+- Add package-lock.json
 - Add typescript support
 - Add tslint
 - Add prettier
