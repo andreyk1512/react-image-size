@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0 - 2026-05-07
 ### Added
 - ESM output at `lib/esm/` with `"module"` and `"exports"` fields in `package.json`
 - SSR guard in `useImageSize` — early return when `typeof window === 'undefined'`
