@@ -1,6 +1,6 @@
 {
   "name": "react-image-size",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "React hook and utility to get image dimensions from a URL. Caching, retries, abort, SSR-safe.",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
