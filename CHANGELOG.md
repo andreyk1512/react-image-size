@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0 - 2026-05-07
+
+### Breaking Changes
+- Error strings from `useImageSize` no longer include the `Error:` prefix. `error` state now returns `err.message` for Error instances instead of `err.toString()`. Example: `"Image not found"` instead of `"Error: Image not found"`
+- ESM entry point added — bundlers resolving `"exports"` field will now get ESM by default
+
+### Fixed
+- Infinite re-render loop when `options` object passed inline — `timeout` is now extracted as a primitive dep
+- State update on unmounted component — `useEffect` now cancels in-flight requests on cleanup
+- Unsafe error cast `(error as string).toString()` replaced with proper `instanceof Error` check
+
+### Added
+- ESM output at `lib/esm/` with `"module"` and `"exports"` fields in `package.json`
+- SSR guard in `useImageSize` — early return when `typeof window === 'undefined'`
+
+### Changed
+- Migrated from deprecated `tslint` to ESLint 10 + `@typescript-eslint` + `eslint-plugin-react-hooks`
+- Migrated from deprecated `@testing-library/react-hooks` to `@testing-library/react` v16
+- Upgraded TypeScript 4 → 6
+- Upgraded Jest 29 → 30
+- Upgraded React devDeps 16 → 19 (peerDeps unchanged: `>=16.9.0`)
+- Upgraded Prettier 2 → 3
+
 ## 2.4.0 - 2024-06-14
 ### Changed
 - Reset error when url change

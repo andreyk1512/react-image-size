@@ -7,25 +7,43 @@ export const useImageSize = (url: string, options?: Options): UseImageSizeResult
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const timeout = options?.timeout;
+
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    let cancelled = false;
+
     const fetch = async () => {
       setLoading(true);
       setDimensions(null);
       setError(null);
 
       try {
-        const { width, height } = await getImageSize(url, options);
+        const { width, height } = await getImageSize(url, { timeout });
 
-        setDimensions({ width, height });
-      } catch (error: unknown) {
-        setError((error as string).toString());
+        if (!cancelled) {
+          setDimensions({ width, height });
+        }
+      } catch (err: unknown) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : String(err));
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     fetch();
-  }, [url, options]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [url, timeout]);
 
   return [dimensions, { loading, error }];
 };

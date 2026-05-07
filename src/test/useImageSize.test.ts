@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 import * as getImageSizeModule from '../lib/getImageSize';
 import { useImageSize } from '../lib/useImageSize';
 
@@ -19,38 +19,36 @@ describe('useImageSize', () => {
 
     getImageSizeSpy.mockResolvedValueOnce(dimensions);
 
-    const { result, waitForNextUpdate } = renderHook(() => useImageSize(url));
+    const { result } = renderHook(() => useImageSize(url));
 
-    expect(result.current[0]).toBeNull(); // Initial dimensions should be null
-    expect(result.current[1].loading).toBe(true); // Loading state should be true
+    expect(result.current[0]).toBeNull();
+    expect(result.current[1].loading).toBe(true);
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      expect(result.current[1].loading).toBe(false);
+    });
 
-    expect(result.current[0]).toEqual(dimensions); // Dimensions should be updated
-    expect(result.current[1].loading).toBe(false); // Loading state should be false
-    expect(result.current[1].error).toBeNull(); // Error state should be null
+    expect(result.current[0]).toEqual(dimensions);
+    expect(result.current[1].error).toBeNull();
   });
 
   it('should set error state on image loading error', async () => {
     const url = 'https://example.com/nonexistent.jpg';
     const errorMessage = 'Image not found';
 
-    // Mock the getImageSize function to throw an error
     getImageSizeSpy.mockRejectedValueOnce(new Error(errorMessage));
 
-    const { result, waitForNextUpdate } = renderHook(() => useImageSize(url));
+    const { result } = renderHook(() => useImageSize(url));
 
-    expect(result.current[0]).toBeNull(); // Initial dimensions should be null
-    expect(result.current[1].loading).toBe(true); // Loading state should be true
+    await waitFor(() => {
+      expect(result.current[1].loading).toBe(false);
+    });
 
-    await waitForNextUpdate();
-
-    expect(result.current[0]).toBeNull(); // Dimensions should remain null
-    expect(result.current[1].loading).toBe(false); // Loading state should be false
-    expect(result.current[1].error).toEqual(`Error: ${errorMessage}`); // Error state should be set
+    expect(result.current[0]).toBeNull();
+    expect(result.current[1].error).toEqual(errorMessage);
   });
 
-  it('should update dimensions when the URL or options change', async () => {
+  it('should update dimensions when the URL changes', async () => {
     const url1 = 'https://example.com/image1.jpg';
     const url2 = 'https://example.com/image2.jpg';
     const dimensions1 = { width: 100, height: 200 };
@@ -58,28 +56,27 @@ describe('useImageSize', () => {
 
     getImageSizeSpy.mockResolvedValueOnce(dimensions1);
 
-    const { result, waitForNextUpdate, rerender } = renderHook(
+    const { result, rerender } = renderHook(
       ({ url }) => useImageSize(url),
       { initialProps: { url: url1 } }
     );
 
-    expect(result.current[0]).toBeNull(); // Initial dimensions should be null
-    expect(result.current[1].loading).toBe(true); // Loading state should be true
-
-    await waitForNextUpdate();
-
-    expect(result.current[0]).toEqual(dimensions1); // Dimensions should be updated
+    await waitFor(() => {
+      expect(result.current[0]).toEqual(dimensions1);
+    });
 
     getImageSizeSpy.mockResolvedValueOnce(dimensions2);
 
-    // Rerender the hook with a new URL
     rerender({ url: url2 });
 
-    expect(result.current[0]).toBeNull(); // Dimensions should be reset
-    expect(result.current[1].loading).toBe(true); // Loading state should be true
+    expect(result.current[0]).toBeNull();
+    expect(result.current[1].loading).toBe(true);
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      expect(result.current[0]).toEqual(dimensions2);
+    });
 
-    expect(result.current[0]).toEqual(dimensions2); // New dimensions should be updated
+    expect(result.current[1].loading).toBe(false);
+    expect(result.current[1].error).toBeNull();
   });
 });
