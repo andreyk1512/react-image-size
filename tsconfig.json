@@ -7,6 +7,7 @@
         "ignoreDeprecations": "6.0",
         "rootDir": "./src",
         "declaration": true,
+        "declarationMap": true,
         "outDir": "./lib",
         "strict": true,
         "types": ["jest"]

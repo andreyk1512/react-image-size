@@ -3,21 +3,20 @@
   "version": "3.0.0",
   "description": "Functional for getting dimensions of any image by url",
   "main": "lib/index.js",
-  "module": "lib/esm/index.js",
+  "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/esm/index.js",
-      "require": "./lib/index.js",
-      "types": "./lib/index.d.ts"
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js"
     }
   },
   "scripts": {
-    "build:cjs": "tsc",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build": "yarn build:cjs && yarn build:esm",
+    "build": "tsup",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\"",
+    "size": "size-limit",
     "test": "jest",
     "test:coverage": "yarn test --coverage",
     "prepare": "yarn build"
@@ -52,8 +51,15 @@
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   },
+  "size-limit": [
+    {
+      "path": "lib/index.mjs",
+      "limit": "3 kB"
+    }
+  ],
   "devDependencies": {
     "@jest/globals": "^30.3.0",
+    "@size-limit/preset-small-lib": "^12.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
@@ -68,7 +74,9 @@
     "prettier": "^3.8.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "size-limit": "^12.1.0",
     "ts-jest": "^29.4.9",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   }
 }

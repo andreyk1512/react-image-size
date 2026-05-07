@@ -14,7 +14,15 @@
 
 - **React hook** — `useImageSize` with `loading` and `error` state out of the box
 - **Standalone function** — `getImageSize` for use outside of React components
-- **Timeout support** — cancel slow image loads automatically
+- **Result caching** — repeated calls with the same URL return instantly from cache; configure freshness with `staleTime`
+- **Request deduplication** — concurrent calls for the same URL share one in-flight request
+- **Abort support** — cancel in-flight requests via `AbortSignal`
+- **Retry support** — automatically retry failed loads with exponential backoff
+- **Lazy loading** — skip fetching until `enabled: true`
+- **Manual refetch** — call `refetch()` to bypass cache and re-fetch on demand
+- **Keep previous data** — hold old dimensions + `isPreviousData` flag while new URL loads
+- **CORS support** — configure `crossOrigin` attribute per request
+- **Timeout support** — reject slow image loads automatically
 - **SSR safe** — no crash in server-side rendering environments
 - **Dual ESM / CJS** — works with any bundler or module system
 - **Zero dependencies** — no runtime deps beyond React itself
@@ -59,7 +67,7 @@ function ImageInfo() {
 
 ### `useImageSize` hook
 
-The hook fetches image dimensions reactively. It re-fetches automatically when the URL or options change.
+The hook fetches image dimensions reactively. It re-fetches automatically when the URL or options change. Pending requests are automatically cancelled when the URL changes or the component unmounts.
 
 ```tsx
 import { useImageSize } from 'react-image-size';
@@ -67,17 +75,68 @@ import { useImageSize } from 'react-image-size';
 const [dimensions, { loading, error }] = useImageSize(url, options);
 ```
 
-**With a timeout:**
+**With timeout and retries:**
 
 ```tsx
-const [dimensions, { loading, error }] = useImageSize(url, { timeout: 5000 });
+const [dimensions, { loading, error }] = useImageSize(url, {
+  timeout: 5000,
+  retries: 2,
+});
 ```
 
-**Handling all states:**
+**Lazy loading — fetch only when ready:**
+
+```tsx
+const [dimensions, { loading, error }] = useImageSize(url, {
+  enabled: !!url,
+});
+```
+
+**No flash on URL change with `keepPreviousData`:**
+
+```tsx
+const [dimensions, { loading, error, isPreviousData }] = useImageSize(url, {
+  keepPreviousData: true,
+});
+// dimensions holds the previous image's size while the new one loads
+// isPreviousData is true while the new URL is in-flight
+```
+
+**Manual refetch:**
+
+```tsx
+const [dimensions, { loading, refetch }] = useImageSize(url);
+
+// Re-fetch on demand — bypasses cache
+<button onClick={refetch}>Refresh</button>
+```
+
+**Stale-while-revalidate with `staleTime`:**
+
+```tsx
+const [dimensions, { loading }] = useImageSize(url, {
+  staleTime: 60_000, // cache is fresh for 60s; re-fetch after that
+});
+```
+
+**CORS image:**
+
+```tsx
+const [dimensions, { loading, error }] = useImageSize(url, {
+  crossOrigin: 'anonymous',
+});
+```
+
+**Full example:**
 
 ```tsx
 function Avatar({ src }: { src: string }) {
-  const [dimensions, { loading, error }] = useImageSize(src, { timeout: 3000 });
+  const [dimensions, { loading, error }] = useImageSize(src, {
+    enabled: !!src,
+    keepPreviousData: true,
+    retries: 2,
+    timeout: 5000,
+  });
 
   if (loading) return <Skeleton />;
   if (error)   return <Fallback />;
@@ -105,21 +164,59 @@ import { getImageSize } from 'react-image-size';
 const { width, height } = await getImageSize('https://example.com/photo.jpg');
 ```
 
+**With retries:**
+
+```ts
+const { width, height } = await getImageSize(url, { retries: 3, timeout: 5000 });
+```
+
+**With abort support:**
+
+```ts
+import { getImageSize } from 'react-image-size';
+
+const controller = new AbortController();
+
+setTimeout(() => controller.abort(), 3000);
+
+const { width, height } = await getImageSize(url, { signal: controller.signal });
+```
+
 **With error handling:**
 
 ```ts
 import { getImageSize, Error as ImageError } from 'react-image-size';
 
 try {
-  const { width, height } = await getImageSize(url, { timeout: 5000 });
+  const { width, height } = await getImageSize(url, { timeout: 5000, retries: 2 });
   console.log(width, height);
 } catch (err) {
-  if (err === ImageError.TIMEOUT) {
-    console.error('Image took too long to load');
-  } else {
-    console.error(err);
-  }
+  if (err === ImageError.TIMEOUT)  console.error('Too slow');
+  if (err === ImageError.ABORTED)  console.error('Cancelled');
+  else                             console.error(err);
 }
+```
+
+---
+
+### `clearCache` function
+
+Clears the entire in-memory dimensions cache.
+
+```ts
+import { clearCache } from 'react-image-size';
+
+clearCache();
+```
+
+### `clearCacheEntry` function
+
+Removes a single URL from the cache. `refetch()` calls this internally.
+
+```ts
+import { clearCacheEntry } from 'react-image-size';
+
+clearCacheEntry('https://example.com/photo.jpg');
 ```
 
 ---
@@ -131,7 +228,7 @@ try {
 | Parameter | Type | Description |
 |---|---|---|
 | `url` | `string` | URL of the image to measure |
-| `options` | `Options` | Optional configuration (see below) |
+| `options` | `UseImageSizeOptions` | Optional configuration (see below) |
 
 **Returns** `[Dimensions | null, State]`
 
@@ -140,6 +237,8 @@ try {
 | `dimensions` | `Dimensions \| null` | `{ width, height }` when loaded, `null` otherwise |
 | `state.loading` | `boolean` | `true` while the image is being fetched |
 | `state.error` | `string \| null` | Error message, or `null` if no error |
+| `state.refetch` | `() => void` | Clears the cache entry and re-fetches |
+| `state.isPreviousData` | `boolean` | `true` when dimensions are from the previous URL (only with `keepPreviousData`) |
 
 ---
 
@@ -159,6 +258,21 @@ try {
 | Property | Type | Default | Description |
 |---|---|---|---|
 | `timeout` | `number` | `undefined` | Max milliseconds to wait before rejecting with `"Timeout"` |
+| `signal` | `AbortSignal` | `undefined` | Abort signal to cancel the request |
+| `retries` | `number` | `0` | Number of retry attempts on failure (exponential backoff: 1s, 2s, 3s…) |
+| `crossOrigin` | `string` | `undefined` | Sets `img.crossOrigin` — use `'anonymous'` or `'use-credentials'` for CORS images |
+| `staleTime` | `number` | `undefined` | Cache TTL in milliseconds. After this, the cached result is considered stale and re-fetched |
+
+---
+
+### `UseImageSizeOptions`
+
+Extends `Options` with hook-specific fields:
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `enabled` | `boolean` | `true` | Set to `false` to skip fetching until ready |
+| `keepPreviousData` | `boolean` | `false` | Keep previous dimensions while new URL is loading |
 
 ---
 
@@ -180,7 +294,8 @@ Predefined rejection values you can compare against in catch blocks:
 ```ts
 import { Error as ImageError } from 'react-image-size';
 
-ImageError.TIMEOUT              // 'Timeout'
+ImageError.TIMEOUT               // 'Timeout'
+ImageError.ABORTED               // 'Aborted'
 ImageError.WINDOW_IS_NOT_DEFINED // 'Window is not defined'
 ImageError.URL_IS_NOT_DEFINED    // 'Url is not defined'
 ```
