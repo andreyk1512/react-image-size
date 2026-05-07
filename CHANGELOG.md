@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.1.0 - 2026-05-07
+### Added
+- Result caching — repeated `getImageSize` calls with the same URL resolve instantly from a module-level cache
+- `clearCache()` export to manually invalidate the cache
+- `clearCacheEntry(url)` export to invalidate a single URL in the cache
+- Abort support via `AbortSignal` — pass `signal` in options to cancel in-flight requests
+- `Error.ABORTED` constant for identifying abort rejections
+- `retries` option — automatically retry failed loads with exponential backoff (1s, 2s, 3s…)
+- `crossOrigin` option — sets `img.crossOrigin` attribute for CORS images
+- `staleTime` option — cache TTL in ms; cached result is re-fetched after it expires
+- Request deduplication — concurrent calls for the same URL share a single in-flight `Image` request
+- `enabled` option (`useImageSize` only) — skip fetching until `true`, re-fetches when it becomes `true`
+- `keepPreviousData` option (`useImageSize` only) — hold previous dimensions while new URL loads, eliminates null flash
+- `refetch` in `useImageSize` return value — clears cache entry and re-triggers fetch
+- `isPreviousData` in `useImageSize` return value — `true` when dimensions are from the previous URL
+- `UseImageSizeOptions` type export — extends `Options` with hook-specific fields
+- Bundle size check via `size-limit` (`yarn size`) — enforces ≤ 3 kB
+
+### Changed
+- Build migrated from dual `tsc` to `tsup` — outputs `lib/index.js` (CJS) and `lib/index.mjs` (ESM)
+- `tsconfig.esm.json` removed — ESM build now handled by tsup
+- Added `declarationMap: true` to tsconfig for IDE source navigation
+
+### Fixed
+- Image load was not actually cancelled on cleanup — `img.src = ''` is now called via `AbortController` when the hook unmounts or URL changes
+
 ## 3.0.0 - 2026-05-07
 ### Added
 - ESM output at `lib/esm/` with `"module"` and `"exports"` fields in `package.json`
