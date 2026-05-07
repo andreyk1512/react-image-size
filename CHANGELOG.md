@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.1.0 - 2026-05-07
 ### Added
 - Result caching — repeated `getImageSize` calls with the same URL resolve instantly from a module-level cache
 - `clearCache()` export to manually invalidate the cache
