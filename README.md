@@ -1,107 +1,224 @@
-# <img src="https://akrupa1512-common-public.s3.eu-central-1.amazonaws.com/images/react-image-size-logo.png" alt="react-image-size" />
+<img src="https://akrupa1512-common-public.s3.eu-central-1.amazonaws.com/images/react-image-size-logo.png" alt="react-image-size" />
 
-![npm type definitions](https://img.shields.io/npm/types/react-image-size)
-![npm](https://img.shields.io/npm/v/react-image-size)
-![npm package minimized gzipped size (select exports)](https://img.shields.io/bundlejs/size/react-image-size)
-![NPM](https://img.shields.io/npm/l/react-image-size)
-![npm](https://img.shields.io/npm/dw/react-image-size)
+[![npm](https://img.shields.io/npm/v/react-image-size)](https://www.npmjs.com/package/react-image-size)
+[![npm bundle size](https://img.shields.io/bundlejs/size/react-image-size)](https://bundlejs.com/?q=react-image-size)
+[![npm type definitions](https://img.shields.io/npm/types/react-image-size)](https://www.npmjs.com/package/react-image-size)
+[![npm](https://img.shields.io/npm/dw/react-image-size)](https://www.npmjs.com/package/react-image-size)
+[![NPM](https://img.shields.io/npm/l/react-image-size)](https://github.com/andreyk1512/react-image-size/blob/main/LICENSE)
 
-# Introduction
-**react-image-size** is a JavaScript library for obtaining the width and height of an image from its URL. It provides a React hook and an asynchronous function for retrieving image dimensions.
+**react-image-size** is a tiny, zero-dependency React library for getting the intrinsic width and height of any image from its URL. Ships with a React hook and a standalone async utility — both fully typed.
+
+---
+
+## Features
+
+- **React hook** — `useImageSize` with `loading` and `error` state out of the box
+- **Standalone function** — `getImageSize` for use outside of React components
+- **Timeout support** — cancel slow image loads automatically
+- **SSR safe** — no crash in server-side rendering environments
+- **Dual ESM / CJS** — works with any bundler or module system
+- **Zero dependencies** — no runtime deps beyond React itself
+- **Fully typed** — written in TypeScript, types included
+
+---
 
 ## Installation
-You can install the library using npm or yarn:
 
-```shell
-npm install -S react-image-size
+```sh
+npm install react-image-size
 ```
-or
-```shell
+
+```sh
 yarn add react-image-size
 ```
 
-## Usage
-To use the library in your React project, you can import the useImageSize hook and call it with the image URL:
+---
 
-```typescript jsx
+## Quick Start
+
+```tsx
 import { useImageSize } from 'react-image-size';
 
-function App() {
-  const [dimensions, { loading, error }] = useImageSize('https://example.com/image.jpg');
+function ImageInfo() {
+  const [dimensions, { loading, error }] = useImageSize('https://example.com/photo.jpg');
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error)   return <p>Error: {error}</p>;
 
   return (
-    <div>
-      <p>Width: {dimensions?.width}</p>
-      <p>Height: {dimensions?.height}</p>
-    </div>
+    <p>
+      {dimensions?.width} × {dimensions?.height}
+    </p>
   );
 }
 ```
-You can also use the getImageSize function directly:
-```typescript
-import { getImageSize } from 'react-image-size';
 
-async function fetchImageSize() {
-    try {
-        const dimensions = await getImageSize('https://example.com/image.jpg');
-        console.log(dimensions);
-    } catch (error) {
-        console.error(error);
-    }
+---
+
+## Usage
+
+### `useImageSize` hook
+
+The hook fetches image dimensions reactively. It re-fetches automatically when the URL or options change.
+
+```tsx
+import { useImageSize } from 'react-image-size';
+
+const [dimensions, { loading, error }] = useImageSize(url, options);
+```
+
+**With a timeout:**
+
+```tsx
+const [dimensions, { loading, error }] = useImageSize(url, { timeout: 5000 });
+```
+
+**Handling all states:**
+
+```tsx
+function Avatar({ src }: { src: string }) {
+  const [dimensions, { loading, error }] = useImageSize(src, { timeout: 3000 });
+
+  if (loading) return <Skeleton />;
+  if (error)   return <Fallback />;
+
+  return (
+    <img
+      src={src}
+      width={dimensions?.width}
+      height={dimensions?.height}
+      alt="avatar"
+    />
+  );
 }
 ```
 
-### API Reference
-The library exports two functions and two types:
+---
 
-#### useImageSize(url: string, options?: Options): UseImageSizeResult
-A React hook that returns the dimensions of the image and a loading and error state. Parameters:
-- url: the URL of the image
-- options: an optional object with the following properties:
-  - timeout: the maximum time in milliseconds to wait for the image to load before rejecting the Promise. Default is undefined.
+### `getImageSize` function
 
-Returns an array with the following elements:
-- dimensions: an object with the width and height of the image, or null if the image has not yet loaded.
-- state: an object with the following properties:
-  - loading: a boolean indicating whether the image is currently loading.
-  - error: a string containing an error message, or null if no error occurred.
+Use this outside of React (event handlers, utilities, Node.js scripts with a DOM polyfill, etc.).
 
-#### getImageSize(url: string, options?: Options): Promise<Dimensions>
-An asynchronous function that returns a Promise that resolves to an object with the width and height of the image. Parameters:
-- url: the URL of the image
-- options: an optional object with the following properties:
-  - timeout: the maximum time in milliseconds to wait for the image to load before rejecting the Promise. Default is undefined.
+```ts
+import { getImageSize } from 'react-image-size';
 
-Returns a Promise that resolves to an object with the following properties:
-- width: the width of the image
-- height: the height of the image
-
-#### Options
-An object with the following optional properties:
-- timeout: the maximum time in milliseconds to wait for the image to load before rejecting the Promise. Default is undefined.
-
-#### Dimensions
-An object with the following properties:
-- width: the width of the image
-- height: the height of the image
-
-### Conclusion
-react-image-size is a lightweight and easy-to-use library for retrieving the dimensions of an image from its URL. With both a React hook and an asynchronous function available, it can be integrated seamlessly into any project.
-
-
-### Migrate from V1 to V2
-```typescript
-OLD: import reactImageSize from 'react-image-size';
-NEW: import { getImageSize } from 'react-image-size';
-
-OLD: const { width, height } = await reactImageSize(imageUrl);
-NEW: const { width, height } = await getImageSize(imageUrl);
+const { width, height } = await getImageSize('https://example.com/photo.jpg');
 ```
+
+**With error handling:**
+
+```ts
+import { getImageSize, Error as ImageError } from 'react-image-size';
+
+try {
+  const { width, height } = await getImageSize(url, { timeout: 5000 });
+  console.log(width, height);
+} catch (err) {
+  if (err === ImageError.TIMEOUT) {
+    console.error('Image took too long to load');
+  } else {
+    console.error(err);
+  }
+}
+```
+
+---
+
+## API Reference
+
+### `useImageSize(url, options?)`
+
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | `string` | URL of the image to measure |
+| `options` | `Options` | Optional configuration (see below) |
+
+**Returns** `[Dimensions | null, State]`
+
+| Value | Type | Description |
+|---|---|---|
+| `dimensions` | `Dimensions \| null` | `{ width, height }` when loaded, `null` otherwise |
+| `state.loading` | `boolean` | `true` while the image is being fetched |
+| `state.error` | `string \| null` | Error message, or `null` if no error |
+
+---
+
+### `getImageSize(url, options?)`
+
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | `string` | URL of the image to measure |
+| `options` | `Options` | Optional configuration (see below) |
+
+**Returns** `Promise<Dimensions>` — resolves with `{ width, height }` or rejects with an error string.
+
+---
+
+### `Options`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `timeout` | `number` | `undefined` | Max milliseconds to wait before rejecting with `"Timeout"` |
+
+---
+
+### `Dimensions`
+
+```ts
+type Dimensions = {
+  width: number;
+  height: number;
+};
+```
+
+---
+
+### `Error` constants
+
+Predefined rejection values you can compare against in catch blocks:
+
+```ts
+import { Error as ImageError } from 'react-image-size';
+
+ImageError.TIMEOUT              // 'Timeout'
+ImageError.WINDOW_IS_NOT_DEFINED // 'Window is not defined'
+ImageError.URL_IS_NOT_DEFINED    // 'Url is not defined'
+```
+
+---
+
+## Migration Guide
+
+### v2 → v3
+
+**Error message format changed.** The `error` string from `useImageSize` no longer includes the `Error:` prefix:
+
+```ts
+// v2
+state.error === 'Error: Image not found'
+
+// v3
+state.error === 'Image not found'
+```
+
+**ESM is now the default** for bundlers that resolve the `exports` field in `package.json`.
+
+---
+
+### v1 → v2
+
+```ts
+// v1
+import reactImageSize from 'react-image-size';
+const { width, height } = await reactImageSize(url);
+
+// v2+
+import { getImageSize } from 'react-image-size';
+const { width, height } = await getImageSize(url);
+```
+
+---
+
+## License
+
+[MIT](./LICENSE) © [Andrii Krupa](https://github.com/andreyk1512)

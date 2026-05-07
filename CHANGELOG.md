@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0 - 2026-05-07
+### Added
+- ESM output at `lib/esm/` with `"module"` and `"exports"` fields in `package.json`
+- SSR guard in `useImageSize` — early return when `typeof window === 'undefined'`
+
+### Changed
+- **BREAKING** Error strings from `useImageSize` no longer include the `Error:` prefix. `error` state now returns `err.message` for Error instances instead of `err.toString()`. Example: `"Image not found"` instead of `"Error: Image not found"`
+- **BREAKING** ESM entry point added — bundlers resolving `"exports"` field will now get ESM by default
+- Migrated from deprecated `tslint` to ESLint 10 + `@typescript-eslint` + `eslint-plugin-react-hooks`
+- Migrated from deprecated `@testing-library/react-hooks` to `@testing-library/react` v16
+- Upgraded TypeScript 4 → 6
+- Upgraded Jest 29 → 30
+- Upgraded React devDeps 16 → 19 (peerDeps unchanged: `>=16.9.0`)
+- Upgraded Prettier 2 → 3
+
+### Fixed
+- Infinite re-render loop when `options` object passed inline — `timeout` is now extracted as a primitive dep
+- State update on unmounted component — `useEffect` now cancels in-flight requests on cleanup
+- Unsafe error cast `(error as string).toString()` replaced with proper `instanceof Error` check
+
 ## 2.4.0 - 2024-06-14
 ### Changed
 - Reset error when url change
@@ -50,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `prettier` and `typescript` dev dependencies
 
 ### Fixed
-- Fix [package-lock.json](package-lock.json) version
+- Fix package-lock.json version
 
 ## 2.0.1 - 2023-03-14
 ### Changed
@@ -62,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2.0.0 - 2022-11-26
 ### Added
 - Add `peerDependencies` to [package.json](package.json)
-- Add [package-lock.json](package-lock.json)
+- Add package-lock.json
 - Add typescript support
 - Add tslint
 - Add prettier

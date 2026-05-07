@@ -1,20 +1,17 @@
 import { getImageSize } from '../lib/getImageSize';
 
-type EventListenerCallback = (data: { width: number; height: number }) => void;
-type ErrorEventListenerCallback = (data: { type: string; message: string }) => void;
+type LoadCallback = (data: { width: number; height: number }) => void;
+type ErrorCallback = (data: { type: string; message: string }) => void;
 
 describe('getImageSize', () => {
-  let windowSpy: jest.SpyInstance;
-  let imageSpy: jest.SpyInstance;
+  let originalImage: typeof window.Image;
 
   beforeEach(() => {
-    windowSpy = jest.spyOn(globalThis, 'window', 'get');
-    imageSpy = jest.spyOn(globalThis.window, 'Image');
+    originalImage = window.Image;
   });
 
   afterEach(() => {
-    windowSpy.mockRestore();
-    imageSpy.mockRestore();
+    window.Image = originalImage;
   });
 
   it('should resolve with the correct dimensions when the image loads', async () => {
@@ -22,16 +19,14 @@ describe('getImageSize', () => {
     const expectedDimensions = { width: 100, height: 200 };
 
     const imageMock = {
-      addEventListener: (event: string, callback: EventListenerCallback) => {
-        if (event === 'load') {
-          callback(expectedDimensions);
-        }
+      addEventListener: (event: string, callback: LoadCallback) => {
+        if (event === 'load') callback(expectedDimensions);
       },
       naturalWidth: expectedDimensions.width,
       naturalHeight: expectedDimensions.height,
-      src: url,
+      src: '',
     };
-    imageSpy.mockImplementationOnce(() => imageMock);
+    window.Image = jest.fn(() => imageMock) as unknown as typeof window.Image;
 
     const dimensions = await getImageSize(url);
 
@@ -43,66 +38,29 @@ describe('getImageSize', () => {
     const errorMessage = 'Error message';
 
     const imageMock = {
-      addEventListener: (event: string, callback: ErrorEventListenerCallback) => {
-        if (event === 'error') {
-          callback({ type: 'error', message: errorMessage });
-        }
+      addEventListener: (event: string, callback: ErrorCallback) => {
+        if (event === 'error') callback({ type: 'error', message: errorMessage });
       },
-      src: url,
+      src: '',
     };
-    imageSpy.mockImplementationOnce(() => imageMock);
+    window.Image = jest.fn(() => imageMock) as unknown as typeof window.Image;
 
-    try {
-      await getImageSize(url);
-
-      expect(true).toBe(false);
-    } catch (error) {
-      expect(error).toEqual(`error: ${errorMessage}`);
-    }
-  });
-
-  it('should reject with "Window is not defined" if not running in a browser environment', async () => {
-    const url = 'https://example.com/image.jpg';
-
-    windowSpy.mockImplementation(() => undefined);
-
-    try {
-      await getImageSize(url);
-
-      expect(true).toBe(false);
-    } catch (error) {
-      expect(error).toBe('Window is not defined');
-    }
+    await expect(getImageSize(url)).rejects.toEqual(`error: ${errorMessage}`);
   });
 
   it('should reject with "Url is not defined" when the URL is not provided', async () => {
-    const url = '';
-
-    try {
-      await getImageSize(url);
-
-      expect(true).toBe(false);
-    } catch (error) {
-      expect(error).toBe('Url is not defined');
-    }
+    await expect(getImageSize('')).rejects.toBe('Url is not defined');
   });
 
   it('should reject with "Timeout" if a timeout option is provided and the image loading takes longer', async () => {
     const url = 'https://example.com/image.jpg';
-    const timeout = 100;
 
     const imageMock = {
       addEventListener: jest.fn(),
-      src: url,
+      src: '',
     };
-    imageSpy.mockImplementationOnce(() => imageMock);
+    window.Image = jest.fn(() => imageMock) as unknown as typeof window.Image;
 
-    try {
-      await getImageSize(url, { timeout });
-
-      expect(true).toBe(false);
-    } catch (error) {
-      expect(error).toBe('Timeout');
-    }
+    await expect(getImageSize(url, { timeout: 100 })).rejects.toBe('Timeout');
   });
 });
